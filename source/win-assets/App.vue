@@ -1,0 +1,166 @@
+<template>
+  <WindowChrome
+    v-bind:title="windowTitle"
+    v-bind:titlebar="true"
+    v-bind:menubar="false"
+    v-bind:show-tabbar="true"
+    v-bind:tabbar-tabs="tabs"
+    v-bind:tabbar-label="'Defaults'"
+    v-bind:disable-vibrancy="!hasVibrancy"
+    v-on:tab="currentTab = $event"
+  >
+    <!--
+      To comply with ARIA, we have to wrap the form in a tab container because
+      we make use of the tabbar on the window chrome.
+    -->
+    <div
+      v-bind:id="tabs[currentTab].controls"
+      role="tabpanel"
+      v-bind:aria-labelledby="tabs[currentTab].id"
+      style="height: 100%;"
+    >
+      <!-- Export defaults -->
+      <DefaultsTab
+        v-if="tabs[currentTab].id === 'tab-export-control'"
+        v-bind:which="'export'"
+      ></DefaultsTab>
+      <!-- Import defaults -->
+      <DefaultsTab
+        v-if="tabs[currentTab].id === 'tab-import-control'"
+        v-bind:which="'import'"
+      ></DefaultsTab>
+      <!-- Lua Filter editor -->
+      <FilterTab
+        v-else-if="tabs[currentTab].id === 'tab-filter-control'"
+      ></FilterTab>
+      <!-- Snippets Editor -->
+      <SnippetsTab
+        v-else-if="tabs[currentTab].id === 'tab-snippets-control'"
+      ></SnippetsTab>
+      <!-- Custom CSS -->
+      <CustomCSS
+        v-else-if="tabs[currentTab].id === 'tab-custom-css-control'"
+      ></CustomCSS>
+    </div>
+  </WindowChrome>
+</template>
+
+<script setup lang="ts">
+import WindowChrome from '@common/vue/window/WindowChrome.vue'
+import DefaultsTab from './DefaultsTab.vue'
+import CustomCSS from './CustomCSS.vue'
+import SnippetsTab from './SnippetsTab.vue'
+import { trans } from '@common/i18n-renderer'
+import { ref, computed } from 'vue'
+import { type WindowTab } from '@common/vue/window/WindowTabbar.vue'
+import { useConfigStore } from 'source/pinia'
+import FilterTab from './FilterTab.vue'
+
+const currentTab = ref(0)
+const windowTitle = computed(() => {
+  if (document.body.classList.contains('darwin')) {
+    return tabs[currentTab.value].label
+  } else {
+    return trans('Assets Manager')
+  }
+})
+
+const configStore = useConfigStore()
+const hasVibrancy = computed(() => configStore.config.window.vibrancy && process.platform === 'darwin')
+
+const tabs: WindowTab[] = [
+  {
+    label: trans('Exporting'),
+    controls: 'tab-export',
+    id: 'tab-export-control',
+    icon: 'export'
+  },
+  {
+    label: trans('Importing'),
+    controls: 'tab-import',
+    id: 'tab-import-control',
+    icon: 'import'
+  },
+  {
+    label: trans('Lua Filter'),
+    controls: 'tab-filter',
+    id: 'tab-filter-control',
+    icon: 'filter'
+  },
+  {
+    label: trans('Snippets'),
+    controls: 'tab-snippets',
+    id: 'tab-snippets-control',
+    icon: 'pinboard'
+  },
+  {
+    label: trans('Custom CSS'),
+    controls: 'tab-custom-css',
+    id: 'tab-custom-css-control',
+    icon: 'code'
+  }
+]
+</script>
+
+<style lang="less">
+.asset-container-list {
+  display: flex;
+  flex-direction: column;
+  height: stretch;
+
+  .form-control {
+    display: flex;
+    padding: 10px;
+
+    button {
+      flex: 1;
+    }
+  }
+}
+
+.asset-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  margin: 0px 10px;
+
+  .asset-admonition {
+    margin-top: 15px;
+  }
+
+  .asset-input {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+
+    .asset-input-name {
+      flex: 2;
+    }
+
+    .asset-input-button {
+      button {
+        height: stretch;
+      }
+    }
+  }
+
+  .save-asset-file {
+    padding: 10px 0px;
+    display: flex;
+    gap: 15px;
+
+    button {
+      width: 50px;
+    }
+  }
+
+  .CodeMirror {
+    flex-grow: 1;
+  }
+
+  span.protected-info {
+    color: gray;
+  }
+}
+</style>
