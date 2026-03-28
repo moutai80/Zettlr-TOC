@@ -1089,12 +1089,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/fuses@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@electron/fuses@npm:2.1.0"
+"@electron/fuses@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@electron/fuses@npm:2.1.1"
   bin:
     electron-fuses: dist/bin.js
-  checksum: 10/478b12695807adc49af5c7619410d6401b7431828b7618441837ef192670dac73a3e7dc0762df47186898e759f85e48abfbe6fa2d1ca5e57d862b3ec27ac0b2b
+  checksum: 10/63f6fd359d3f6ea6e4e6b38c7b074d08cace9829822c47348c8c075b3d5997538225055217fb75d094a2540dd9c619d2dd5e11f79c558aa1fef9caf80fd7e4f8
   languageName: node
   linkType: hard
 
@@ -16071,7 +16071,7 @@ __metadata:
     "@electron-forge/maker-zip": "npm:^7.11.1"
     "@electron-forge/plugin-fuses": "npm:^7.11.1"
     "@electron-forge/plugin-webpack": "npm:^7.11.1"
-    "@electron/fuses": "npm:^2.1.0"
+    "@electron/fuses": "npm:^2.1.1"
     "@electron/notarize": "npm:^3.1.1"
     "@eslint/config-inspector": "npm:^1.5.0"
     "@lezer/common": "npm:^1.5.1"
