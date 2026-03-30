@@ -1,13 +1,10 @@
 name: i18n
 
 on:
-  workflow_dispatch:  # 只保留手动运行，自动运行关掉
+  workflow_dispatch: {}
 
 jobs:
   i18n:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          ref: main  # 改成主分支，不读错误分支
+      - run: echo "i18n workflow disabled"
